@@ -1,4 +1,5 @@
-define(['underscore', 'handlebars', 'backbone', 'marionette', 'leaflet', 'text!forms/templates/LocationEditor.html',
+define(['underscore', 'handlebars', 'backbon
+e', 'marionette', 'leaflet', 'text!forms/templates/LocationEditor.html',
 	'backbone-forms', 'l.geosearch/l.control.geosearch', 'l.geosearch/l.geosearch.provider.openstreetmap', 'leaflet-locatecontrol/L.Control.Locate'],
 	function(_, Handlebars, Backbone, Marionette, L, template)
 {
@@ -47,6 +48,7 @@ define(['underscore', 'handlebars', 'backbone', 'marionette', 'leaflet', 'text!f
 
 			// add an OpenStreetMap tile layer
 			osm = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+				MaxZoom: 13,
 				attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>'
 			});
 
@@ -59,7 +61,7 @@ define(['underscore', 'handlebars', 'backbone', 'marionette', 'leaflet', 'text!f
 			// create a map in the 'map' div, set the view to a given place and zoom
 			map = this.map = L.map(this.$('.map')[0], {
 				center : new L.LatLng(this.value.lat, this.value.lon),
-				zoom : 15,
+				MaxZoom : 13,
 				layers : [minimal],
 				scrollWheelZoom : false
 			});
@@ -78,7 +80,7 @@ define(['underscore', 'handlebars', 'backbone', 'marionette', 'leaflet', 'text!f
 			// Add geolocation search control
 			this.geosearch = new L.Control.GeoSearch({
 				provider: new L.GeoSearch.Provider.OpenStreetMap(),
-				zoomLevel : 15
+				zoomLevel : 13
 			});
 			this.geosearch._positionMarker = this.marker;
 			this.geosearch._map = this.map;
@@ -88,7 +90,7 @@ define(['underscore', 'handlebars', 'backbone', 'marionette', 'leaflet', 'text!f
 				setView : true, // not sure we need this here?
 				locateOptions : {
 					setView : true,
-					maxZoom : 15
+					maxZoom : 13
 				}
 			}).addTo(this.map);
 
@@ -164,7 +166,7 @@ define(['underscore', 'handlebars', 'backbone', 'marionette', 'leaflet', 'text!f
 
 			this.map.locate({
 				setView : true,
-				maxZoom : 15
+				maxZoom : 13
 			});
 		},
 
