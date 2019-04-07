@@ -17,7 +17,7 @@ define(['marionette', 'handlebars', 'underscore', 'App', 'leaflet', 'util/App.oa
 		{
 			template : Handlebars.compile(template),
 			popupTemplate : Handlebars.compile(popupTemplate),
-			collapsed : false,
+			collapsed : true,
 			className : 'map-view',
 			modelEvents : {
 			  'sync': 'updateMarkers'
@@ -42,11 +42,11 @@ define(['marionette', 'handlebars', 'underscore', 'App', 'leaflet', 'util/App.oa
 				// ensure options is an object
 				options = _.extend({}, options);
 
-				// Should the view start collapsed
-				this.collapsed = false;
+				// Set map state to collapsed so that control expands on mouse hover or touch
+				this.collapsed = true;
 				if (options.collapsed)
 				{
-					this.collapsed = true;
+					this.collapsed = false;
 				}
 
 				// Save custom dataUrl to view object
@@ -77,6 +77,7 @@ define(['marionette', 'handlebars', 'underscore', 'App', 'leaflet', 'util/App.oa
 
 				// add an OpenStreetMap tile layer
 				osm = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+					MaxZoom: 13,
 					attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>'
 				});
 
@@ -90,6 +91,7 @@ define(['marionette', 'handlebars', 'underscore', 'App', 'leaflet', 'util/App.oa
 				map = this.map = L.map(this.$('#map')[0], {
 					center : new L.LatLng(-36.85, 174.78),
 					zoom : 5,
+					MaxZoom: 13,
 					layers : [minimal],
 					scrollWheelZoom : false
 				});
@@ -176,7 +178,7 @@ define(['marionette', 'handlebars', 'underscore', 'App', 'leaflet', 'util/App.oa
 					this.$('.leaflet-container .leaflet-control-zoom').toggle();
 				}
 
-				return false;
+				return true;
 			},
 
 			getDataUrl : function()
@@ -232,10 +234,10 @@ define(['marionette', 'handlebars', 'underscore', 'App', 'leaflet', 'util/App.oa
 
 						// Center map on post markers
 						map.fitBounds(posts.getBounds());
-						// Avoid zooming further than 15 (particularly when we just have a single point)
-						if (map.getZoom() > 15)
+						// Avoid zooming further than 13 (particularly when we just have a single point)
+						if (map.getZoom() > 13)
 						{
-							map.setZoom(15);
+							map.setZoom(13);
 						}
 					},
 					data : (typeof this.collection !== 'undefined') ? this.collection.getFilterParams() : {}
